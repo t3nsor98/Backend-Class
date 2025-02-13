@@ -1,43 +1,25 @@
-const express = require("express");
-
 const app = express();
 const PORT = 8000;
 
+mongoose
+  .connect("mongodb://127.0.0.1:27017/myDatabase")
+  .then(() => {
+    console.log("Connected to database");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
 const users = require("./MOCK_DATA.json");
+
+
 
 // middleware
 app.use(express.urlencoded({ extended: true }));
 
+// schema
+
 // Routes
-app.get("/api/users", (req, res) => {
-  return res.json(users);
-});
-
-app.get("/api/users/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const user = users.find((user) => user.id == id);
-  return res.json(user);
-});
-
-// create new user
-app.post("/api/users", (req, res) => {
-  const { first_name, last_name, email, gender } = req.body;
-
-  if (!first_name || !last_name || !email || !gender) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
-  const newUser = {
-    id: users.length + 1, // Simple ID assignment (better to use UUID in real projects)
-    first_name,
-    last_name,
-    email,
-    gender,
-  };
-
-  users.push(newUser);
-  return res.status(201).json(newUser);
-});
 
 
 // merged
